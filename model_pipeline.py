@@ -92,6 +92,91 @@ class protein:
         cmd = ['/usr/local/share/hhblits/hh-suite/build/bin/hhblits', '-id','100','-cov','50','-i',self.build_dict['target_fasta_path'], '-hide_dssp', '-B', '1', '-b', '1', '-Ofas', aln_path, '-o', hhr_path, '-d', self.database]# path for HHBLITS for now  
         s = subprocess.Popen(cmd)
 
+    def extract_from_query(self):
+        hhr = ''
+        # path to .hhr output file
+        path = self.misc_dir + '/'+self.accession_code + '.hhr'
+        with open(path,'r') as file:
+            for line in enumerate(file):
+                hhr=file.readlines()
+        
+        x = range(0,len(hhr))
+        top_template = ''
+
+
+        # taking the summary file of the input, it parses it
+        # to extract the pdb chain for the top hit from the query
+        for i in x:
+            if hhr[i][0:3]==' No': # how the header just above the top template
+            # begins    
+                top_template=hhr[i+1]
+
+        tt_list = top_template.split() # tokenized string
+
+        pdb_id = tt_list[1].lower() # print id
+        pdb_id = pdb_id.split('_')
+        pdb = pdb_id[0]
+        self.build_dict['pdb_id'] = pdb
+        try:
+            chain = pdb_id[1].upper()
+        except:
+            chain = ''
+
+        self.build_dict['chain_id']= chain
+    # other potentially useful values
+        tpl_range = tt_list[-2] # = template range
+        self.build_dict['template_range'] = tpl_range
+    #tpl_offset = tpl_range.split('-')[0]
+    #print(tt_list[-3]) # = target range
+    #print(tt_list[-4]) # = cols
+    #print(tt_list[-6]) # = scores
+        e_value = tt_list[-8] # = e value
+        self.build_dict['e_value']=e_value
+
+"""
+def get_hhr(path):
+    # takes path as a parameter
+    # returns the text from the summary
+    with open(path,'r') as hhr:
+        for line in enumerate(hhr):
+            doc=hhr.readlines()
+    return doc
+
+def get_tmpl_header(hhr,dir):
+    # taking the summary file of the input, it parses it
+    # to extract the pdb chain for the top hit from the query
+    x = range(0,len(hhr))
+    top_template = ''
+    for i in x:
+        if hhr[i][0:3]==' No': # how the header just above the top template
+        # begins    
+            top_template=hhr[i+1]
+
+    tt_list = top_template.split() # tokenized string
+
+    pdb_id = tt_list[1].lower() # print id
+    pdb_id = pdb_id.split('_')
+    pdb = pdb_id[0]
+    try:
+        chain = pdb_id[1].upper()
+    except:
+        chain = ''
+    # other potentially useful values
+    #tpl_range = tt_list[-2] # = template range
+    #tpl_offset = tpl_range.split('-')[0]
+    #print(tt_list[-3]) # = target range
+    #print(tt_list[-4]) # = cols
+    #print(tt_list[-6]) # = scores
+    #print(tt_list[-8]) # = e value
+    with open(Path(dir+'/var/pdbID.txt'),'w') as f:
+        id = ''.join([pdb,'.',chain])
+        print(id)
+        f.write(id)
+
+    tmpl_header = '>'+pdb+'.'+chain.upper()+'\n'
+    return tmpl_header
+"""
+
 if __name__ == '__main__':
     x = protein('P53621')
     try:
@@ -101,4 +186,5 @@ if __name__ == '__main__':
 
     x.query_hhblits()
 
+    x.extract_from_query()
     x.build_to_json()
