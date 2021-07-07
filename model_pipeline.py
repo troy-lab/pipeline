@@ -3,6 +3,9 @@ from pathlib import Path
 import os
 import urllib.request
 import json
+from ost import io, se
+from promod3 import modelling, loop
+
 # 2. reformat the alignment for check
 #python3 reformat_alignment.py $dataDir $target
 
@@ -133,49 +136,31 @@ class protein:
         e_value = tt_list[-8] # = e value
         self.build_dict['e_value']=e_value
 
-"""
-def get_hhr(path):
-    # takes path as a parameter
-    # returns the text from the summary
-    with open(path,'r') as hhr:
-        for line in enumerate(hhr):
-            doc=hhr.readlines()
-    return doc
 
-def get_tmpl_header(hhr,dir):
-    # taking the summary file of the input, it parses it
-    # to extract the pdb chain for the top hit from the query
-    x = range(0,len(hhr))
-    top_template = ''
-    for i in x:
-        if hhr[i][0:3]==' No': # how the header just above the top template
-        # begins    
-            top_template=hhr[i+1]
+    def get_pdb(self):
+        p=io.LoadPDB(id,seqres=True,remote=True,remote_repo='pdb')
+        pdb=p[0]
+        pdb_path = self.misc_dir + '/template.pdb'
+        chain = self.build_dict['chain_id']
+        if chain != '':
+            l = pdb.GetChainList()
+            query = 'chain='+chain
+            pdb_crn = pdb.Select(query) # returns entityview object
+            io.SavePDB(pdb_crn,pdb_path)
+            pdb=io.LoadPDB(pdb_path)
+        
+        else:
+            io.SavePDB(pdb,pdb_path)
 
-    tt_list = top_template.split() # tokenized string
+        res_list=[]
+        for res in pdb.residues:
+            o_res = res.one_letter_code
+            if o_res != '?':
+                res_list.append(o_res)
+        res_string = ''.join(res_list)
+        self.build_dict['template_from_pdb']=res_string
 
-    pdb_id = tt_list[1].lower() # print id
-    pdb_id = pdb_id.split('_')
-    pdb = pdb_id[0]
-    try:
-        chain = pdb_id[1].upper()
-    except:
-        chain = ''
-    # other potentially useful values
-    #tpl_range = tt_list[-2] # = template range
-    #tpl_offset = tpl_range.split('-')[0]
-    #print(tt_list[-3]) # = target range
-    #print(tt_list[-4]) # = cols
-    #print(tt_list[-6]) # = scores
-    #print(tt_list[-8]) # = e value
-    with open(Path(dir+'/var/pdbID.txt'),'w') as f:
-        id = ''.join([pdb,'.',chain])
-        print(id)
-        f.write(id)
 
-    tmpl_header = '>'+pdb+'.'+chain.upper()+'\n'
-    return tmpl_header
-"""
 
 if __name__ == '__main__':
     x = protein('P53621')
@@ -187,4 +172,5 @@ if __name__ == '__main__':
     x.query_hhblits()
 
     x.extract_from_query()
+
     x.build_to_json()
