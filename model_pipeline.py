@@ -307,6 +307,7 @@ class protein:
             else:
                 file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']
 
+        file_string = file_string + '\n'+aln[0][1]
         align_path = Path(self.misc_dir+'/final_aln.fasta')
         with open(align_path, 'w+') as f:
             f.write(file_string)
