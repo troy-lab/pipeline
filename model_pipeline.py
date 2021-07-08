@@ -174,6 +174,11 @@ class protein:
 
 
     def extract_from_aln(self):
+        chain = self.build_dict['chain_id']
+        if chain != '':
+            header = '>'+self.build_dict['pdb_id']+'.'+chain.upper()+'\n'
+        else:
+            header = '>'+self.build_dict['pdb_id'] 
         # path to .aln output file
         path = self.misc_dir + '/'+self.accession_code + '_aln.fasta'
         with open(path, 'r') as fasta:
