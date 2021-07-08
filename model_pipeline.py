@@ -93,7 +93,14 @@ class protein:
         hhr_path = self.misc_dir + '/'+self.accession_code + '.hhr'
         print('alnpath{}\nhhrpath{}'.format(aln_path,hhr_path))
         cmd = ['/usr/local/share/hhblits/hh-suite/build/bin/hhblits', '-id','100','-cov','50','-i',self.build_dict['target_fasta_path'], '-hide_dssp', '-B', '1', '-b', '1', '-Ofas', aln_path, '-o', hhr_path, '-d', self.database]# path for HHBLITS for now  
-        s = subprocess.Popen(cmd)
+        p = subprocess.Popen(cmd)
+        (output, err) = p.communicate()  
+
+        #This makes the wait possible
+        p_status = p.wait()
+
+        #This will give you the output of the command being executed
+        print("Command output: " + output)
 
     def extract_from_query(self):
         hhr = ''
