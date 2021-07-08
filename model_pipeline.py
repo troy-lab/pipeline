@@ -294,7 +294,18 @@ class protein:
         target = self.build_dict['target_fasta_from_aln']
         aln = pairwise2.align.globalms(target, template, 5, -.5, -4, -2,one_alignment_only=True)
         print(format_alignment(*aln[0]))
-        file_string='>target\n'+aln[0][0] + '\n>template\n'+aln[0][1]
+        # add offset to alignment
+        if self.build_dict['chain'] != '':
+            if 'offset' in self.build_dict.keys():
+                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+self.build_dict['chain']+'|'+self.build_dict['offset']
+            else:
+                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+self.build_dict['chain']
+        else:
+            if 'offset' in self.build_dict.keys(): 
+                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'|'+self.build_dict['offset']
+            else:
+                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']
+
         align_path = Path(self.misc_dir+'/final_aln.fasta')
         with open(align_path, 'w+') as f:
             f.write(file_string)
