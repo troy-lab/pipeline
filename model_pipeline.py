@@ -273,11 +273,11 @@ class protein:
         print(format_alignment(*alignments[0]))
         print(alignments)
         print(alignments[0])
-        pdb_aligned = alignments[0][0]
+        pdb_aligned = alignments[0][1]
         print(pdb_aligned)
 
         if len(og_template) < len(pdb_aligned):
-            og_aligned = alignments[0][1]
+            og_aligned = alignments[0][0]
             print('og aligned')
             print(og_aligned)
             trimmed = self.trim(og_aligned,pdb_aligned) # og template, then pdb_template
