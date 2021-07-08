@@ -211,7 +211,7 @@ class protein:
             self.build_dict['target_fasta_from_aln']=trg
 
     # for trimming alignment fasta
-    def trim_left(og_fas,pdb_fas):
+    def trim_left(self,og_fas,pdb_fas):
         og = list(og_fas)
         pdb = list(pdb_fas)
         co = 0
@@ -228,7 +228,7 @@ class protein:
         return og,pdb,co
 
     # for trimming alignment fasta
-    def trim_right(og_fas,pdb_fas):
+    def trim_right(self,og_fas,pdb_fas):
         og_fas=og_fas.strip()
         pdb_fas=pdb_fas.strip()
         og = list(og_fas)
@@ -247,13 +247,13 @@ class protein:
 
 
     # for trimming alignment fasta
-    def trim(og_fas,pdb_fas):
+    def trim(self,og_fas,pdb_fas):
         print('trimming fasta files')
-        left_results=trim_left(og_fas,pdb_fas)
+        left_results=self.trim_left(og_fas,pdb_fas)
         og = left_results[0]
         pdb=left_results[1]
         count=left_results[2]
-        right_results = trim_right(og,pdb)
+        right_results = self.trim_right(og,pdb)
         pdb = right_results[0]
         right_deletions=right_results[1]
         return pdb,count,right_deletions
