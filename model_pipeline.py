@@ -212,6 +212,8 @@ class protein:
         pdb_template = pdb_template.replace('-','')
         alignments = pairwise2.align.globalms(og_template, pdb_template,3,1,-3,-1,one_alignment_only=True)
         print(format_alignment(*alignments[0]))
+        print(alignments)
+        print(alignments[0])
         pdb_aligned = alignments[0].seqB
 
         if len(og_template) <= len(pdb_aligned):
