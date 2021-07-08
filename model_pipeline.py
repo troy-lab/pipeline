@@ -100,7 +100,8 @@ class protein:
         p_status = p.wait()
 
         #This will give you the output of the command being executed
-        print("Command output: " + output)
+        print("Command output: ")
+        print(output)
 
     def extract_from_query(self):
         hhr = ''
