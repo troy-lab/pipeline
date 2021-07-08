@@ -255,7 +255,7 @@ if __name__ == '__main__':
 
     x.extract_from_query()
 
-    x.extract_from_query()
+    x.extract_from_aln()
 
     x.get_pdb()
 
