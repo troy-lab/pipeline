@@ -202,9 +202,97 @@ class protein:
 
             tmp = ''.join(tmpList)
             tmp = tmp.replace('\n','')
-            self.build_dict['template_fasta']=tmp
+            self.build_dict['template_fasta_from_aln']=tmp
 
 
+    def fix_templates(self):
+        og_template = self.build_dict['template_fasta_from_aln']
+        og_template = og_template.replace('-','')
+        pdb_template = self.build_dict['template_from_pdb']
+        pdb_template = pdb_template.replace('-','')
+        alignments = pairwise2.align.globalms(og_template, pdb_template,3,1,-3,-1,one_alignment_only=True)
+        pdb_aligned = alignments[0].seqB
+
+        if len(og_template) <= len(pdb_aligned):
+            og_aligned = alignments[0].seqA
+            trimmed = trim(og_aligned,pdb_aligned)
+            pdb_aligned = trimmed[0]
+
+        pdb_aligned = pdb_aligned.replace('-','')
+
+        self.build_dict['final_template_fasta'] = pdb_aligned
+
+
+
+
+
+        """
+        # if the orignial is shorter than the pdb, the pdb fasta will need to be trimmed. We will use this format (it does not however, fix internal spaces.) to do that, we will remove all spaces, and then align it to the old file.
+    og_aligned=''
+    pdb_alligned=''
+    # need to return otherwise
+    pdb_aligned=alignments[0].seqB
+    if len(og_fasta) <= len(pdb_fasta):
+        og_aligned = alignments[0].seqA
+        pdb_aligned = alignments[0].seqB
+        trimmed = trim(og_aligned,pdb_aligned)
+        pdb=trimmed[0]
+        count=trimmed[1]
+        right_count=trimmed[2]
+
+    p=Path(dir+'/var/'+fasta+'_template.fasta')
+    #remove - from pdb
+    pdb_aligned=pdb_aligned.replace('-','')
+        """
+
+
+# for trimming alignment fasta
+def trim_left(og_fas,pdb_fas):
+    og = list(og_fas)
+    pdb = list(pdb_fas)
+    co = 0
+    while og[0] == '-':
+        if len(og)==0:
+           break 
+        popped=og.pop(0)
+        co += 1
+    r = range(0,co)
+    for i in r:
+        pdb.pop(0)
+    pdb = ''.join(pdb)
+    og=''.join(og)
+    return og,pdb,co
+
+# for trimming alignment fasta
+def trim_right(og_fas,pdb_fas):
+    og_fas=og_fas.strip()
+    pdb_fas=pdb_fas.strip()
+    og = list(og_fas)
+    pdb = list(pdb_fas)
+    co = 0
+    while og[-1] == '-':     
+        if len(og)==0:
+            break
+        popped=og.pop(-1)    
+        co += 1
+    r = range(1,co)
+    for i in r:
+        pdb.pop(-1)
+    pdb = ''.join(pdb)
+    return pdb,co
+
+
+# for trimming alignment fasta
+def trim(og_fas,pdb_fas):
+    print('trimming fasta files')
+    left_results=trim_left(og_fas,pdb_fas)
+    og = left_results[0]
+    pdb=left_results[1]
+    count=left_results[2]
+    right_results = trim_right(og,pdb)
+    pdb = right_results[0]
+    right_deletions=right_results[1]
+    return pdb,count,right_deletions
 
 
 '''
@@ -262,5 +350,9 @@ if __name__ == '__main__':
     x.extract_from_aln()
 
     x.get_pdb()
+
+    x.fix_templates()
+
+
 
     x.build_to_json()
