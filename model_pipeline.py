@@ -199,10 +199,9 @@ class protein:
             trgList=fa[trg_index:end_trg]
             tmpList=fa[tmpl_index:]
 
-            for i in tmpList:
-                i = i.strip()
 
             tmp = ''.join(tmpList)
+            tmp = tmp.replace('\n','')
             self.build_dict['template_fasta']=tmp
 
 
