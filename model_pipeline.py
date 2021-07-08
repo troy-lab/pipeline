@@ -284,7 +284,7 @@ class protein:
         target = self.build_dict['target_fasta_from_aln']
         aln = pairwise2.align.globalms(target, template, 5, -.5, -4, -2,one_alignment_only=True)
         print(format_alignment(*aln[0]))
-        file_string='>target\n'+aln[0].seqA+'\n>template\n'+aln[0].seqB
+        file_string='>target\n'+aln[0][0] + '\n>template\n'+aln[0][1]
         align_path = Path(self.misc_dir+'/final_aln.fasta')
         with open(align_path, 'w+') as f:
             f.write(file_string)
