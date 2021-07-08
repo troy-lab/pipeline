@@ -223,8 +223,12 @@ class protein:
             popped=og.pop(0)
             co += 1
         r = range(0,co)
+        raw_count = co
+        co = 0
         for i in r:
-            pdb.pop(0)
+            popped = pdb.pop(0)
+            if popped != '-':
+                co +=1
         pdb = ''.join(pdb)
         og=''.join(og)
         return og,pdb,co
@@ -276,6 +280,8 @@ class protein:
             og_aligned = alignments[0][1]
             trimmed = self.trim(og_aligned,pdb_aligned)
             pdb_aligned = trimmed[0]
+            count = trimmed[1]
+            self.build_dict['offset']=count
 
         pdb_aligned = pdb_aligned.replace('-','')
 
@@ -335,6 +341,8 @@ if __name__ == '__main__':
     x.get_pdb()
 
     x.fix_templates()
+
+    x.build_to_json()
 
     x.make_final_alignment()
 
