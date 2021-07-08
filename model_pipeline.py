@@ -146,7 +146,8 @@ class protein:
 
 
     def get_pdb(self):
-        p=io.LoadPDB(id,seqres=True,remote=True,remote_repo='pdb')
+        pdb_id = self.build_dict['pdb_id']
+        p=io.LoadPDB(pdb_id,seqres=True,remote=True,remote_repo='pdb')
         pdb=p[0]
         pdb_path = self.misc_dir + '/template.pdb'
         chain = self.build_dict['chain_id']
