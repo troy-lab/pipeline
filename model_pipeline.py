@@ -217,7 +217,7 @@ class protein:
         co = 0
         while og[0] == '-':
             if len(og)==0:
-            break 
+                break 
             popped=og.pop(0)
             co += 1
         r = range(0,co)
