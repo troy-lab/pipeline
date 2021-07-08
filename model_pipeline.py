@@ -292,7 +292,7 @@ class protein:
     def create_model(self):
         # get raw model
         tpl = io.LoadPDB(self.misc_dir+'/template.pdb')
-        aln = io.LoadAlignment(self.misc_dir+'/.fasta')
+        aln = io.LoadAlignment(self.misc_dir+'/final_aln.fasta')
         aln.AttachView(1, tpl.CreateFullView())
         mhandle = modelling.BuildRawModel(aln)
 
