@@ -8,6 +8,8 @@ from ost import io, seq
 from promod3 import modelling, loop
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
+from Bio.PDB import PDBParser
+from Bio.PDB.DSSP import DSSP
 
 # Check 2. reformat the alignment for check
 #python3 reformat_alignment.py $dataDir $target
@@ -23,7 +25,7 @@ from Bio.pairwise2 import format_alignment
 #python3 final_align.py $dataDir $target
 
 #singularity run -- app PM $HOME/pipeline/promod.sif 
-# 6. build model
+# check 6. build model
 #singularity run --app PM $HOME/pipeline/promod.sif build-model -f ${dataDir}/final_aln.fasta -p ${dataDir}/var/template.pdb -o ${dataDir}/model.pdb
 
 # Calculate DSSP
@@ -300,9 +302,24 @@ class protein:
         final_model = modelling.BuildFromRawModel(mhandle)
         io.SavePDB(final_model, self.output_dir+'/model.pdb')
 
+    def get_dssp(self):
+        p = PDBParser()
+        structure = p.get_structure(self.accession_code,self.output_dir+'/model.pdb')
+        model = structure[0]
+        dssp = DSSP(model, self.output_dir+'/model.pdb',dssp='mkdssp')
+        a_key = list(dssp.keys())[2]
+        dssp_list = []
+        for key in dssp.keys():
+            dssp_list.append(dssp[key][2])
+        secondary_structure = ''.join(dssp_list)
+        self.build_dict['dssp']=secondary_structure
+
+
+
 
 
 if __name__ == '__main__':
+
     x = protein('P06733')
     try:
         x.get_target_fasta()
@@ -322,5 +339,7 @@ if __name__ == '__main__':
     x.make_final_alignment()
 
     x.create_model()
+
+    x.get_dssp()
 
     x.build_to_json()
