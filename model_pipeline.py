@@ -19,7 +19,7 @@ from Bio.pairwise2 import format_alignment
 # check 4. align orginal template to extracted template 
 #python3 align_template1_2.py $dataDir $target
 
-# 5. align target to new template
+# check 5. align target to new template
 #python3 final_align.py $dataDir $target
 
 #singularity run -- app PM $HOME/pipeline/promod.sif 
@@ -289,6 +289,17 @@ class protein:
         with open(align_path, 'w+') as f:
             f.write(file_string)
 
+    def create_model(self):
+        # get raw model
+        tpl = io.LoadPDB(self.misc_dir+'/template.pdb')
+        aln = io.LoadAlignment(self.misc_dir+'/.fasta')
+        aln.AttachView(1, tpl.CreateFullView())
+        mhandle = modelling.BuildRawModel(aln)
+
+        # build final model
+        final_model = modelling.BuildFromRawModel(mhandle)
+        io.SavePDB(final_model, self.output_dir+'/model.pdb')
+
 
 
 if __name__ == '__main__':
@@ -309,5 +320,7 @@ if __name__ == '__main__':
     x.fix_templates()
 
     x.make_final_alignment()
+
+    x.create_model()
 
     x.build_to_json()
