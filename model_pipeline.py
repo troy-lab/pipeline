@@ -16,7 +16,7 @@ from Bio.pairwise2 import format_alignment
 # requires the promod build and singularity
 #singularity run --app PM $HOME/pipeline/promod.sif get_pdb_and_template.py $dataDir
 
-# 4. align orginal template to extracted template 
+# check 4. align orginal template to extracted template 
 #python3 align_template1_2.py $dataDir $target
 
 # 5. align target to new template
@@ -202,8 +202,61 @@ class protein:
 
             tmp = ''.join(tmpList)
             tmp = tmp.replace('\n','')
+            tmp = tmp.replace('-','')
             self.build_dict['template_fasta_from_aln']=tmp
 
+            trg = ''.join(trgList)
+            trg = trg.replace('\n','')
+            trg = trg.replace('-','')
+            self.build_dict['target_fasta_from_aln']=trg
+
+    # for trimming alignment fasta
+    def trim_left(og_fas,pdb_fas):
+        og = list(og_fas)
+        pdb = list(pdb_fas)
+        co = 0
+        while og[0] == '-':
+            if len(og)==0:
+            break 
+            popped=og.pop(0)
+            co += 1
+        r = range(0,co)
+        for i in r:
+            pdb.pop(0)
+        pdb = ''.join(pdb)
+        og=''.join(og)
+        return og,pdb,co
+
+    # for trimming alignment fasta
+    def trim_right(og_fas,pdb_fas):
+        og_fas=og_fas.strip()
+        pdb_fas=pdb_fas.strip()
+        og = list(og_fas)
+        pdb = list(pdb_fas)
+        co = 0
+        while og[-1] == '-':     
+            if len(og)==0:
+                break
+            popped=og.pop(-1)    
+            co += 1
+        r = range(1,co)
+        for i in r:
+            pdb.pop(-1)
+        pdb = ''.join(pdb)
+        return pdb,co
+
+
+    # for trimming alignment fasta
+    def trim(og_fas,pdb_fas):
+        print('trimming fasta files')
+        left_results=trim_left(og_fas,pdb_fas)
+        og = left_results[0]
+        pdb=left_results[1]
+        count=left_results[2]
+        right_results = trim_right(og,pdb)
+        pdb = right_results[0]
+        right_deletions=right_results[1]
+        return pdb,count,right_deletions
 
     def fix_templates(self):
         og_template = self.build_dict['template_fasta_from_aln']
@@ -226,119 +279,10 @@ class protein:
 
         self.build_dict['final_template_fasta'] = pdb_aligned
 
+    def make_final_alignment(self):
+        template = self.build_dict['te']
 
 
-
-
-        """
-        # if the orignial is shorter than the pdb, the pdb fasta will need to be trimmed. We will use this format (it does not however, fix internal spaces.) to do that, we will remove all spaces, and then align it to the old file.
-    og_aligned=''
-    pdb_alligned=''
-    # need to return otherwise
-    pdb_aligned=alignments[0].seqB
-    if len(og_fasta) <= len(pdb_fasta):
-        og_aligned = alignments[0].seqA
-        pdb_aligned = alignments[0].seqB
-        trimmed = trim(og_aligned,pdb_aligned)
-        pdb=trimmed[0]
-        count=trimmed[1]
-        right_count=trimmed[2]
-
-    p=Path(dir+'/var/'+fasta+'_template.fasta')
-    #remove - from pdb
-    pdb_aligned=pdb_aligned.replace('-','')
-        """
-
-
-# for trimming alignment fasta
-def trim_left(og_fas,pdb_fas):
-    og = list(og_fas)
-    pdb = list(pdb_fas)
-    co = 0
-    while og[0] == '-':
-        if len(og)==0:
-           break 
-        popped=og.pop(0)
-        co += 1
-    r = range(0,co)
-    for i in r:
-        pdb.pop(0)
-    pdb = ''.join(pdb)
-    og=''.join(og)
-    return og,pdb,co
-
-# for trimming alignment fasta
-def trim_right(og_fas,pdb_fas):
-    og_fas=og_fas.strip()
-    pdb_fas=pdb_fas.strip()
-    og = list(og_fas)
-    pdb = list(pdb_fas)
-    co = 0
-    while og[-1] == '-':     
-        if len(og)==0:
-            break
-        popped=og.pop(-1)    
-        co += 1
-    r = range(1,co)
-    for i in r:
-        pdb.pop(-1)
-    pdb = ''.join(pdb)
-    return pdb,co
-
-
-# for trimming alignment fasta
-def trim(og_fas,pdb_fas):
-    print('trimming fasta files')
-    left_results=trim_left(og_fas,pdb_fas)
-    og = left_results[0]
-    pdb=left_results[1]
-    count=left_results[2]
-    right_results = trim_right(og,pdb)
-    pdb = right_results[0]
-    right_deletions=right_results[1]
-    return pdb,count,right_deletions
-
-
-'''
-def get_aln_string(path,dir,target,header):
-    # although we don't use this alignment,
-    # we will keep it for testing purposes
-    with open(path, 'r') as fasta:
-        trg_index=0
-        end_trg=0 
-        tmpl_index = 0
-        for line in enumerate(fasta):
-            fa=fasta.readlines()
-        r = range(0,len(fa))
-        for int in r:
-            # where target begins
-            if fa[int][0:3]=='>sp' or fa[int][0:3]=='>tr':
-                trg_index = int+1
-            if fa[int][0:5]=='>ss_p':
-                end_trg=int
-            if fa[int][0:1]=='>' and (fa[int][1:2] != 's' and fa[int][1:3]!='Co'):
-                tmpl_index=int+1
-        trgList=fa[trg_index:end_trg]
-        tmpList=fa[tmpl_index:]
-
-        aln_string='>target\n'+''.join(trgList)+header+ ''.join(tmpList)
-        with open(Path(dir+'/var/'+ target+'_target.fasta'),'w') as trg:
-            trg_str = ''.join(trgList)
-            trg.write(trg_str)
-
-        # P63241tmpl_from_hhblits.fasta
-        with open(Path(dir+'/var/'+target+'tmpl_from_hhblits.fasta'),'w') as f:
-            tmp = ''.join(tmpList)
-            f.write(tmp)
-        return aln_string
-
-def save_aln_file(aln_string,fasta,dir):
-    # write out new alignment
-    path=Path(dir+"/var/"+fasta+'_aln_2.fasta')
-    with open(path,'w') as aln:
-        aln.write(aln_string)
-    print('Alignment written to file')
-'''
 
 if __name__ == '__main__':
     x = protein('P06733')
@@ -356,7 +300,6 @@ if __name__ == '__main__':
     x.get_pdb()
 
     x.fix_templates()
-
 
 
     x.build_to_json()
