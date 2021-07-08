@@ -199,7 +199,7 @@ class protein:
             trgList=fa[trg_index:end_trg]
             tmpList=fa[tmpl_index:]
 
-            aln_string='>target\n'+''.join(trgList)+header+ ''.join(tmpList)
+            aln_string= ''.join(tmpList)
             self.build_dict['target_fasta'] = aln_string
 
             tmp = ''.join(tmpList)
