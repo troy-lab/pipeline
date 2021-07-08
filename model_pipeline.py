@@ -283,7 +283,7 @@ class protein:
             trimmed = self.trim(og_aligned,pdb_aligned) # og template, then pdb_template
             pdb_aligned = trimmed[0]
             count = trimmed[1]
-            self.build_dict['offset']=count
+            self.build_dict['offset']=count+1
 
         pdb_aligned = pdb_aligned.replace('-','')
 
