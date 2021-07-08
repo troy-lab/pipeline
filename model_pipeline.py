@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 import urllib.request
 import json
-from ost import io, se
+from ost import io, seq
 from promod3 import modelling, loop
 
 # 2. reformat the alignment for check
