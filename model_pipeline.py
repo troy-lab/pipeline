@@ -280,7 +280,14 @@ class protein:
         self.build_dict['final_template_fasta'] = pdb_aligned
 
     def make_final_alignment(self):
-        template = self.build_dict['te']
+        template = self.build_dict['final_template_fasta']
+        target = self.build_dict['target_fasta_from_aln']
+        aln = pairwise2.align.globalms(target, template, 5, -.5, -4, -2,one_alignment_only=True)
+        print(format_alignment(*aln[0]))
+        file_string='>target\n'+aln[0].seqA+'\n>template\n'+aln[0].seqB
+        align_path = Path(self.misc_dir+'/final_aln.fasta')
+        with open(align_path, 'w+') as f:
+            f.write(file_string)
 
 
 
@@ -301,5 +308,6 @@ if __name__ == '__main__':
 
     x.fix_templates()
 
+    x.make_final_alignment()
 
     x.build_to_json()
