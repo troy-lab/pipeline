@@ -163,7 +163,7 @@ class protein:
 
 
 if __name__ == '__main__':
-    x = protein('P53621')
+    x = protein('P06733')
     try:
         x.get_target_fasta()
     except (GetFastaFailed, WriteFileFailed) as e:
