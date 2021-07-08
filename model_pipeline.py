@@ -276,9 +276,11 @@ class protein:
         pdb_aligned = alignments[0][0]
         print(pdb_aligned)
 
-        if len(og_template) <= len(pdb_aligned):
+        if len(og_template) < len(pdb_aligned):
             og_aligned = alignments[0][1]
-            trimmed = self.trim(og_aligned,pdb_aligned)
+            print('og aligned')
+            print(og_aligned)
+            trimmed = self.trim(og_aligned,pdb_aligned) # og template, then pdb_template
             pdb_aligned = trimmed[0]
             count = trimmed[1]
             self.build_dict['offset']=count
