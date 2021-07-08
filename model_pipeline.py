@@ -3,13 +3,16 @@ from pathlib import Path
 import os
 import urllib.request
 import json
+
 from ost import io, seq
 from promod3 import modelling, loop
+from Bio import pairwise2
+from Bio.pairwise2 import format_alignment
 
-# 2. reformat the alignment for check
+# Check 2. reformat the alignment for check
 #python3 reformat_alignment.py $dataDir $target
 
-# 3. get .pdb structure for template and extract amino acid sequence
+# Check 3. get .pdb structure for template and extract amino acid sequence
 # requires the promod build and singularity
 #singularity run --app PM $HOME/pipeline/promod.sif get_pdb_and_template.py $dataDir
 
@@ -170,6 +173,76 @@ class protein:
         self.build_dict['template_from_pdb']=res_string
 
 
+    def extract_from_aln(self):
+        # path to .aln output file
+        path = self.misc_dir + '/'+self.accession_code + '_aln.fasta'
+        with open(path, 'r') as fasta:
+            trg_index=0
+            end_trg=0 
+            tmpl_index = 0
+            for line in enumerate(fasta):
+                fa=fasta.readlines()
+            r = range(0,len(fa))
+            for int in r:
+                # where target begins
+                if fa[int][0:3]=='>sp' or fa[int][0:3]=='>tr':
+                    trg_index = int+1
+                if fa[int][0:5]=='>ss_p':
+                    end_trg=int
+                if fa[int][0:1]=='>' and (fa[int][1:2] != 's' and fa[int][1:3]!='Co'):
+                    tmpl_index=int+1
+            trgList=fa[trg_index:end_trg]
+            tmpList=fa[tmpl_index:]
+
+            aln_string='>target\n'+''.join(trgList)+header+ ''.join(tmpList)
+            self.build_dict['target_fasta'] = aln_string
+
+            tmp = ''.join(tmpList)
+            self.build_dict['template_fasta']=tmp
+
+
+
+
+'''
+def get_aln_string(path,dir,target,header):
+    # although we don't use this alignment,
+    # we will keep it for testing purposes
+    with open(path, 'r') as fasta:
+        trg_index=0
+        end_trg=0 
+        tmpl_index = 0
+        for line in enumerate(fasta):
+            fa=fasta.readlines()
+        r = range(0,len(fa))
+        for int in r:
+            # where target begins
+            if fa[int][0:3]=='>sp' or fa[int][0:3]=='>tr':
+                trg_index = int+1
+            if fa[int][0:5]=='>ss_p':
+                end_trg=int
+            if fa[int][0:1]=='>' and (fa[int][1:2] != 's' and fa[int][1:3]!='Co'):
+                tmpl_index=int+1
+        trgList=fa[trg_index:end_trg]
+        tmpList=fa[tmpl_index:]
+
+        aln_string='>target\n'+''.join(trgList)+header+ ''.join(tmpList)
+        with open(Path(dir+'/var/'+ target+'_target.fasta'),'w') as trg:
+            trg_str = ''.join(trgList)
+            trg.write(trg_str)
+
+        # P63241tmpl_from_hhblits.fasta
+        with open(Path(dir+'/var/'+target+'tmpl_from_hhblits.fasta'),'w') as f:
+            tmp = ''.join(tmpList)
+            f.write(tmp)
+        return aln_string
+
+def save_aln_file(aln_string,fasta,dir):
+    # write out new alignment
+    path=Path(dir+"/var/"+fasta+'_aln_2.fasta')
+    with open(path,'w') as aln:
+        aln.write(aln_string)
+    print('Alignment written to file')
+'''
 
 if __name__ == '__main__':
     x = protein('P06733')
@@ -179,6 +252,8 @@ if __name__ == '__main__':
         pass
 
     x.query_hhblits()
+
+    x.extract_from_query()
 
     x.extract_from_query()
 
