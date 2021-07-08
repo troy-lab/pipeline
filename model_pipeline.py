@@ -295,11 +295,12 @@ class protein:
         aln = pairwise2.align.globalms(target, template, 5, -.5, -4, -2,one_alignment_only=True)
         print(format_alignment(*aln[0]))
         # add offset to alignment
-        if self.build_dict['chain'] != '':
+        chain = self.build_dict['chain_id']
+        if chain != '':
             if 'offset' in self.build_dict.keys():
-                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+self.build_dict['chain']+'|'+self.build_dict['offset']
+                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+chain+'|'+self.build_dict['offset']
             else:
-                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+self.build_dict['chain']
+                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+chain
         else:
             if 'offset' in self.build_dict.keys(): 
                 file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'|'+self.build_dict['offset']
