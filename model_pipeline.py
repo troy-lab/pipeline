@@ -181,4 +181,6 @@ if __name__ == '__main__':
 
     x.extract_from_query()
 
+    x.get_pdb()
+
     x.build_to_json()
