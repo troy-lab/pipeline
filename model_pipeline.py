@@ -272,7 +272,7 @@ class protein:
 
         if len(og_template) <= len(pdb_aligned):
             og_aligned = alignments[0][1]
-            trimmed = trim(og_aligned,pdb_aligned)
+            trimmed = self.trim(og_aligned,pdb_aligned)
             pdb_aligned = trimmed[0]
 
         pdb_aligned = pdb_aligned.replace('-','')
