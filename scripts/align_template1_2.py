@@ -100,3 +100,4 @@ if __name__ == '__main__':
     pdb_aligned=pdb_aligned.replace('-','')
     with open(p,'w') as file:
         file.write(pdb_aligned)
+
