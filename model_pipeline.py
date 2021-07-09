@@ -11,27 +11,6 @@ from Bio.pairwise2 import format_alignment
 from Bio.PDB import PDBParser
 from Bio.PDB.DSSP import DSSP
 
-# Check 2. reformat the alignment for check
-#python3 reformat_alignment.py $dataDir $target
-
-# Check 3. get .pdb structure for template and extract amino acid sequence
-# requires the promod build and singularity
-#singularity run --app PM $HOME/pipeline/promod.sif get_pdb_and_template.py $dataDir
-
-# check 4. align orginal template to extracted template 
-#python3 align_template1_2.py $dataDir $target
-
-# check 5. align target to new template
-#python3 final_align.py $dataDir $target
-
-#singularity run -- app PM $HOME/pipeline/promod.sif 
-# check 6. build model
-#singularity run --app PM $HOME/pipeline/promod.sif build-model -f ${dataDir}/final_aln.fasta -p ${dataDir}/var/template.pdb -o ${dataDir}/model.pdb
-
-# Calculate DSSP
-#python3 get_dssp.py $dataDir
-
-
 class GetFastaFailed(Exception):
     pass
 
@@ -283,7 +262,7 @@ class protein:
             trimmed = self.trim(og_aligned,pdb_aligned) # og template, then pdb_template
             pdb_aligned = trimmed[0]
             count = trimmed[1]
-            self.build_dict['offset']=count+1
+            self.build_dict['offset']=count
 
         pdb_aligned = pdb_aligned.replace('-','')
 
@@ -331,7 +310,7 @@ class protein:
         # singularity run --app PM $HOME/pipeline/promod.sif build-model -f ${dataDir}/final_aln.fasta -p ${dataDir}/var/template.pdb -o ${dataDir}/model.pdb
         tpl = self.misc_dir+'/template.pdb'
         aln = self.misc_dir+'/final_aln.fasta' 
-        cmd = ['PM', 'build-model','-f',aln,'-p',tpl,'-o', self.output_dir+'/model.pdb']  
+        cmd = ['pm', 'build-model','-f',aln,'-p',tpl,'-o', self.output_dir+'/model.pdb']  
         p = subprocess.Popen(cmd)
         (output, err) = p.communicate()  
 
@@ -361,6 +340,7 @@ class protein:
 if __name__ == '__main__':
 
     x = protein('P06733')
+    # do try except in the loop, if it fails do a continue and go to the next one
     try:
         x.get_target_fasta()
     except (GetFastaFailed, WriteFileFailed) as e:
