@@ -298,9 +298,9 @@ class protein:
         chain = self.build_dict['chain_id']
         if chain != '':
             if 'offset' in self.build_dict.keys():
-                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+chain+'|'+str(self.build_dict['offset'])
+                file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'.'+chain+'|'+str(self.build_dict['offset'])
             else:
-                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'_'+chain
+                file_string = '>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'.'+chain
         else:
             if 'offset' in self.build_dict.keys(): 
                 file_string ='>target\n'+aln[0][0]+'\n>'+self.build_dict['pdb_id']+'|'+str(self.build_dict['offset'])
