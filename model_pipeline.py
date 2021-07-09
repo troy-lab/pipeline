@@ -317,7 +317,8 @@ class protein:
         tpl = io.LoadPDB(self.misc_dir+'/template.pdb')
         aln = io.LoadAlignment(self.misc_dir+'/final_aln.fasta')
         aln.AttachView(1, tpl.CreateFullView())
-        aln.SetOffset(self.build_dict['offset'])
+        print(aln)
+        #aln.SetSequenceOffset(self.build_dict['offset'])
         mhandle = modelling.BuildRawModel(aln)
 
         # build final model
