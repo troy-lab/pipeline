@@ -325,6 +325,23 @@ class protein:
         final_model = modelling.BuildFromRawModel(mhandle)
         io.SavePDB(final_model, self.output_dir+'/model.pdb')
 
+
+    def build_model(self):
+        #hhblits -id 100 -cov 50 -cpu $cpu -i $dataDir/${target}.fasta -hide_dssp -B 1 -b 1 -Ofas ${dataDir}/var/${target}_aln.fasta -o ${dataDir}/var/${target}.hhr -d $database
+        # singularity run --app PM $HOME/pipeline/promod.sif build-model -f ${dataDir}/final_aln.fasta -p ${dataDir}/var/template.pdb -o ${dataDir}/model.pdb
+        tpl = self.misc_dir+'/template.pdb'
+        aln = self.misc_dir+'/final_aln.fasta' 
+        cmd = ['PM', 'build-model','-f',aln,'-p',tpl,'-o', self.output_dir+'/model.pdb']  
+        p = subprocess.Popen(cmd)
+        (output, err) = p.communicate()  
+
+        #This makes the wait possible
+        p_status = p.wait()
+
+        #This will give you the output of the command being executed
+        print("Command output: ")
+        print(output)
+
     def get_dssp(self):
         p = PDBParser()
         structure = p.get_structure(self.accession_code,self.output_dir+'/model.pdb')
@@ -363,7 +380,7 @@ if __name__ == '__main__':
 
     x.make_final_alignment()
 
-    x.create_model()
+    x.build_model()
 
     x.get_dssp()
 
