@@ -22,7 +22,7 @@ class protein:
     root_dir = '.'
     
     # change database location as needed
-    database = '/root/pipeline/database/pdb70' 
+    database = './database/pdb70'
     
     def __init__(self, acc_code):
         self.accession_code = acc_code.strip()
