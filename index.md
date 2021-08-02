@@ -18,7 +18,7 @@ This will be directions on how to use the software.
 #### Running on HPC Clusters
 CCAST Help
 
-### Input Formatting Requirements
+#### Input Formatting Requirements
 
 This will contain how to format accession .csv files and where the place to change the defaults is found in the source code
 
