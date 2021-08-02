@@ -7,6 +7,28 @@ This homology modeling pipeline is designed to streamline and automate the task 
 
 This software is only compatible with Linux systems.
 
+### Gettting Started
+
+This is where directions on how to set up the software will go.
+
+### Running the Software
+
+This will be directions on how to use the software.
+
+#### Running on HPC Clusters
+CCAST Help
+
+### Input Formatting Requirements
+
+This will contain how to format accession .csv files and where the place to change the defaults is found in the source code
+
+### References
+
+This will be the places my software is from, such as HHBLITS, ProMod3, etc.
+
+### Special Thanks
+
+Include Grant information, thank you's, etc. here.
 
 
 ### Github stuff
