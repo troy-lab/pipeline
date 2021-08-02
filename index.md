@@ -1,6 +1,6 @@
 ## Homology Modeling Pipeline
 
-This homology modeling pipeline is designed to streamline and automate the task of creating 3-D models in a .pdb format for a given Uni-Prot KB accession code. Other than remotely accessing Uni-Prot KB in order to access the amino acid sequence and retrieving the template .pdb structure from the Protein Data Bank, the modeling process will take place entirely on your local machine.
+This homology modeling pipeline is designed to streamline and automate the task of creating 3-D models in a .pdb format for a given UniProtKB accession code. Other than remotely accessing UniProtKB in order to access the amino acid sequence and retrieving the template .pdb structure from the Protein Data Bank, the modeling process will take place entirely on your local machine.
 
 You can use the [editor on GitHub](https://github.com/troy-lab/pipeline/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
