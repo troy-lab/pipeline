@@ -1,3 +1,4 @@
+import time
 import subprocess
 from pathlib import Path
 import os
@@ -17,6 +18,13 @@ class GetFastaFailed(Exception):
 class WriteFileFailed(Exception):
     pass
 
+root_dir = '.'
+
+hhblits = root_dir + '/hhblits/bin/hhblits'
+    
+# change database location as needed
+database = './database/pdb70'
+ 
 class protein:
     # class variables
     root_dir = '.'
@@ -28,7 +36,7 @@ class protein:
         self.accession_code = acc_code.strip()
         self.build_dict = {}
         # make directory for build
-        self.output_dir = self.root_dir +'/'+ self.accession_code
+        self.output_dir = self.root_dir +'/data/'+ self.accession_code
         if not os.path.exists(self.output_dir):
             os.mkdir(self.output_dir)
         # make directory for misc build files
@@ -77,7 +85,7 @@ class protein:
         aln_path = self.misc_dir + '/'+self.accession_code + '_aln.fasta'
         hhr_path = self.misc_dir + '/'+self.accession_code + '.hhr'
         print('alnpath{}\nhhrpath{}'.format(aln_path,hhr_path))
-        cmd = ['/usr/local/share/hhblits/hh-suite/build/bin/hhblits', '-id','100','-cov','50','-i',self.build_dict['target_fasta_path'], '-hide_dssp', '-B', '1', '-b', '1', '-Ofas', aln_path, '-o', hhr_path, '-d', self.database]# path for HHBLITS for now  
+        cmd = [hhblits, '-id','100','-cov','50','-i',self.build_dict['target_fasta_path'], '-hide_dssp', '-B', '1', '-b', '1', '-Ofas', aln_path, '-o', hhr_path, '-d', self.database]# path for HHBLITS for now  
         p = subprocess.Popen(cmd)
         (output, err) = p.communicate()  
 
