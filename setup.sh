@@ -17,3 +17,15 @@ cd database
 tar xvf *.tar.gz 
 # if the build was successful, the compressed file can be deleted
 rm *.tar.gz
+
+cd ..
+
+mkdir hhblits
+
+cd hhblits
+
+wget https://github.com/soedinglab/hh-suite/releases/download/v3.3.0/hhsuite-3.3.0-SSE2-Linux.tar.gz; tar xvfz hhsuite-3.3.0-SSE2-Linux.tar.gz; export PATH="$(pwd)/bin:$(pwd)/scripts:$PATH"
+
+cd ..
+
+mkdir data
