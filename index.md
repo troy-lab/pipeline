@@ -55,10 +55,24 @@ This will contain how to format accession .csv files and where the place to chan
 
 ### References
 
+Steinegger M, Meier M, Mirdita M, Vöhringer H, Haunsberger S J, and Söding J (2019) HH-suite3 for fast remote homology detection and deep protein annotation, BMC Bioinformatics, 473. doi: 10.1186/s12859-019-3019-7
+
+Studer G, Tauriello G, Bienert S, Biasini M, Johner N, Schwede T (2021) ProMod3—A versatile homology modelling toolbox. PLoS Comput Biol 17(1): e1008667. https://doi.org/10.1371/journal.pcbi.1008667
+
+
 This will be the places my software is from, such as HHBLITS, ProMod3, etc.
 
 ### Special Thanks
 
+Thank you to Dr. Bakhtiyor Rasulev for supporting and guiding this project.
+Thank you also to Dr. Dali Sun for your support of this project.
+Thank you to NDSU's Coatings and Polymeric Materials department.
+
+For more information, please visit the following:
+https://rasulev.org/
+https://www.ndsu.edu/cpm/
+
+Any more information?
 Include Grant information, thank you's, etc. here.
 
 
