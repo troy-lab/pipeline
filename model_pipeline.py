@@ -369,9 +369,11 @@ if __name__ == '__main__':
 
 
     df = pd.read_csv('HC1.csv')
+    if 'Checked' not in df.columns:
+        df.insert(0,'Checked',value=False)
 
-    df = df.iloc[1: , :]
-    df = df.head(5)
+    df = df.iloc[6: , :]
+    df = df.head(3)
     print(df)
 
     while df.tail(1)['Checked'].bool() == False:
