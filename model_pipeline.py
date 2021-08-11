@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 import urllib.request
 import json
-
+import pandas as pd
 from ost import io, seq
 from promod3 import modelling, loop
 from Bio import pairwise2
@@ -343,10 +343,37 @@ class protein:
         self.build_dict['dssp']=secondary_structure
 
 
+    def get_ss(self):
+        """
+         # internal method to analyze the extracted sspro8 secondary structure
+         # breaks the secondary structure into a list, then iterates through
+         # and augments the respective values until it reaches the end of the list
+        """
+        dssp = self.build_dict['dssp']
+        dssp = list(dssp)
+        helix = 0
+        beta = 0
+        c = 0
+        unknown = 0
+        # H=HGI, E=EB, C=STC
+        for i in dssp:
+            if i == ("H" or "G" or "I"):
+                helix+=1
+            elif i == ("E" or "B"):
+                beta+=1
+            elif i == ("S" or "T" or "C"):
+                c +=1
+            else:
+                unknown +=1
+        
+        return helix, beta, c, unknown
 
 
 
 if __name__ == '__main__':
+
+
+    df = pd.read_csv('HC1.csv')
 
     x = protein('P06733')
     # do try except in the loop, if it fails do a continue and go to the next one
@@ -372,5 +399,7 @@ if __name__ == '__main__':
     x.build_model()
 
     x.get_dssp()
+
+    print(x.get_ss())
 
     x.build_to_json()
