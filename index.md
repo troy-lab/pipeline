@@ -23,6 +23,8 @@ This step involves downloading the database of amino acid sequences from the pro
 sh setup.sh
 ```
 
+Lastly, load a .csv file into the same directory. This should contain the UniprotKB Accession codes for the proteins you wish to model. Make sure to follow the proper formatting for the .csv file, as described below.
+
 ### Running the Software
 
 This will be directions on how to use the software.
