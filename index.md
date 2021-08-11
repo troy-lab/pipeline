@@ -6,10 +6,22 @@ This homology modeling pipeline is designed to streamline and automate the task 
 ### Requirements
 
 This software is only compatible with Linux systems.
+It has been tested on kernel 4.18.0-193.el8.x86_64 using Singularity 3.7+.
 
-### Gettting Started
+### Getting Started
 
-This is where directions on how to set up the software will go.
+To setup the software, begin by cloning the git repository.
+
+```markdown
+git clone https://github.com/troy-lab/pipeline.git
+```
+
+Next, to setup the database and necessary directories, within the git repository run the setup.sh script.
+This step involves downloading the database of amino acid sequences from the protein databank, and may take several hours.
+
+```markdown
+sh setup.sh
+```
 
 ### Running the Software
 
