@@ -372,12 +372,13 @@ if __name__ == '__main__':
     if 'Checked' not in df.columns:
         df.insert(0,'Checked',value=False)
 
-    df = df.iloc[6: , :]
+    df = df.iloc[13: , :]
     df = df.head(3)
     print(df)
 
     while df.tail(1)['Checked'].bool() == False:
 
+        t = time.time()
         try:
             index = df[df.Checked==False].head(1).index[0]
         except:
@@ -497,4 +498,12 @@ if __name__ == '__main__':
 
         df.at[index, 'Checked'] = True
 
+        elapsed_time = time.time() - t
+
+        df.at[index, 'modeling_time'] = elapsed_time
+
+        print(elapsed_time)
+
         df.to_csv('output.csv')
+
+
