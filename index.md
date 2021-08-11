@@ -65,11 +65,15 @@ This will be the places my software is from, such as HHBLITS, ProMod3, etc.
 ### Special Thanks
 
 Thank you to Dr. Bakhtiyor Rasulev for supporting and guiding this project.
+
 Thank you also to Dr. Dali Sun for your support of this project.
+
 Thank you to NDSU's Coatings and Polymeric Materials department.
 
 For more information, please visit the following:
+
 https://rasulev.org/
+
 https://www.ndsu.edu/cpm/
 
 Any more information?
