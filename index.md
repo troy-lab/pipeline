@@ -8,6 +8,9 @@ This homology modeling pipeline is designed to streamline and automate the task 
 This software is only compatible with Linux systems.
 It has been tested on kernel 4.18.0-193.el8.x86_64 using Singularity 3.7+.
 
+To download Singularity 3.8, visit their documentation:
+https://sylabs.io/guides/3.8/user-guide/quick_start.html
+
 ### Getting Started
 
 To setup the software, begin by cloning the git repository.
@@ -27,7 +30,21 @@ Lastly, load a .csv file into the same directory. This should contain the Unipro
 
 ### Running the Software
 
-This will be directions on how to use the software.
+So long as the format of the .csv files is correct, simply issue this command from the cloned repository:
+
+```markdown
+singularity exec --app PM promod.sif ~/pipeline/model
+```
+Note that if you did not place your repository in $HOME/pipeline, you will need to adjust ~/pipeline/model accordingly.
+
+The model file is a bash script which calls the python script model_pipeline.py. This is to simplify running the Homology Pipeline on an HPC cluster.
+
+You may also run the software from the base directory like so:
+
+```markdown
+singularity run --app PM promod.sif model_pipeline.py
+
+```
 
 #### Running on HPC Clusters
 CCAST Help
