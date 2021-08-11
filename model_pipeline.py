@@ -1,4 +1,5 @@
 import time
+import numpy as np
 import subprocess
 from pathlib import Path
 import os
@@ -11,12 +12,6 @@ from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 from Bio.PDB import PDBParser
 from Bio.PDB.DSSP import DSSP
-
-class GetFastaFailed(Exception):
-    pass
-
-class WriteFileFailed(Exception):
-    pass
 
 root_dir = '.'
 
@@ -375,31 +370,129 @@ if __name__ == '__main__':
 
     df = pd.read_csv('HC1.csv')
 
-    x = protein('P06733')
-    # do try except in the loop, if it fails do a continue and go to the next one
-    try:
-        x.get_target_fasta()
-    except (GetFastaFailed, WriteFileFailed) as e:
-        pass
+    df = df.iloc[1: , :]
+    df = df.head(5)
+    print(df)
 
-    x.query_hhblits()
+    while df.tail(1)['Checked'].bool() == False:
 
-    x.extract_from_query()
+        try:
+            index = df[df.Checked==False].head(1).index[0]
+        except:
+            print('modeling complete')
+            continue
 
-    x.extract_from_aln()
+        x = protein(df.at[index,'Accession'])
 
-    x.get_pdb()
+        
+        # do try except in the loop, if it fails do a continue and go to the next one
+        try:
+            x.get_target_fasta()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1
+            x.build_dict['error'] = 'Failed getting fasta' 
+            x.build_to_json()
+            continue
+    
+        try:
+            x.query_hhblits()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1
+            x.build_dict['error'] = 'Failed querying with HHBlits'
+            x.build_to_json()
+            continue
 
-    x.fix_templates()
+    
+        try:
+            x.extract_from_query()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed extracting from query'
+            x.build_to_json()
+            continue
 
-    x.build_to_json()
+    
+        try:
+            x.extract_from_aln()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed extracting from alignment'
+            x.build_to_json()
+            continue
 
-    x.make_final_alignment()
+        try:
+            x.get_pdb()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed retrieving template pdb'
+            x.build_to_json()
+            continue
 
-    x.build_model()
+    
+        try:
+            x.fix_templates()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed fixing templated'
+            x.build_to_json()
+            continue
 
-    x.get_dssp()
+    
+        try: 
+            x.make_final_alignment()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed final alignment'
+            x.build_to_json()
+            continue
+   
+        try:
+            x.build_model()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed building model'
+            x.build_to_json()
+            continue
+   
+        try:
+            x.get_dssp()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed calculating secondary structure'
+            x.build_to_json()
+            continue
+   
+        print(x.get_ss())
+        try:
+            # helix, beta, c, unknown
+            secondary_structure = x.get_ss()
+            df.at[index, 'helix'] = secondary_structure[0]
+            df.at[index, 'beta'] = secondary_structure[1]
+            df.at[index, 'c'] = secondary_structure[2]
+            df.at[index, 'unknown'] = secondary_structure[3]
 
-    print(x.get_ss())
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            x.build_dict['error'] = 'Failed retrieving template pdb'
+            x.build_to_json()
+            continue
+        try:
+            x.build_to_json()
+        except:
+            df.at[index, 'Checked'] = True
+            df.at[index, 'error'] = 1 
+            continue
 
-    x.build_to_json()
+        df.at[index, 'Checked'] = True
+
+        df.to_csv('output.csv')
