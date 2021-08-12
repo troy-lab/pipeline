@@ -35,7 +35,19 @@ So long as the format of the .csv files is correct, simply issue this command fr
 ```markdown
 singularity exec --app PM promod.sif ~/pipeline/model
 ```
-Note that if you did not place your repository in $HOME/pipeline, you will need to adjust ~/pipeline/model accordingly.
+Note that if you did not place your repository in "$HOME/pipeline", you will need to adjust the path "~/pipeline/model" accordingly.
+
+If your .csv file is not named "input.csv", you will need to edit line 371 of model_pipeline.py accordingly.
+
+If you wish to change the name of the output.csv file, edit the last line of model_pipeline.py
+
+```markdown
+df.to_csv(x.root_dir+'/output.csv')
+```
+to 
+```markdown
+df.to_csv(x.root_dir+'/desired_name.csv')
+```
 
 The model file is a bash script which calls the python script model_pipeline.py. This is to simplify running the Homology Pipeline on an HPC cluster.
 
@@ -46,8 +58,37 @@ singularity run --app PM promod.sif model_pipeline.py
 
 ```
 
+
 #### Running on HPC Clusters
-CCAST Help
+When running the Homology Pipeline on an HPC cluster using Singularity users must run "singularity exec ..." rather than "singularity run ..."
+
+To use the pipeline with the job scheduler qsub, users must call a bash script which then calls the python script. Be sure to allow execution access to the relevant files in the qsub .pbs file. Here is an example for qsub below:
+
+```markdown
+#!/bin/bash
+#PBS -q default
+#PBS -N name of instance
+#PBS -M user@email
+#PBS -m abe
+#PBS -l select=1:mem=64gb:ncpus=8
+#PBS -l walltime=1000:00 # adjust to time needed for models (maximum is about 3:30 per model)
+
+cd $PBS_O_WORKDIR
+
+chmod +x path/to/model_pipeline.py
+
+echo -------------
+
+chmod 777 path/to/.csv/file
+
+chmod +x path/to/model (bash file)
+
+module load singularity # if needed for your HPC cluster
+
+time singularity exec --app PM /path/to/promod.sif /path/to/model
+
+exit 0
+```
 
 #### Input Formatting Requirements
 
