@@ -124,10 +124,15 @@ The 'Checked' column for each protein will be True. In addition, if the error co
 In addition to output from the .csv file, there is a directory called 'data' which contains directories for each protein which was modeled. These directories contin the final model ('model.pdb') and the amino acid sequence for the target protein in a .fasta file. In the subdirectory .var, there are two alignment files with the extension '.aln', which contain the original and formatted alignments. A .hhr file shows the results of the hhblits query, and the template.pdb file has the coordinates for the 3D template used to build the final model. Lastly, a .json file contains information used in the build as well as the calculated DSSP values. If there was an error in modeling, the details can be found in the .json file as well. (n.b. if there was no error modeling a protein, no error information will be present).
 
 ### References
+HH-suite:
 
 Steinegger M, Meier M, Mirdita M, Vöhringer H, Haunsberger S J, and Söding J (2019) HH-suite3 for fast remote homology detection and deep protein annotation, BMC Bioinformatics, 473. doi: 10.1186/s12859-019-3019-7
 
+Promod3:
+
 Studer G, Tauriello G, Bienert S, Biasini M, Johner N, Schwede T (2021) ProMod3—A versatile homology modelling toolbox. PLoS Comput Biol 17(1): e1008667. https://doi.org/10.1371/journal.pcbi.1008667
+
+DSSP:
 
 A series of PDB related databases for everyday needs.
 Wouter G Touw, Coos Baakman, Jon Black, Tim AH te Beek, E Krieger, Robbie P Joosten, Gert Vriend.
