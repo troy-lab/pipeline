@@ -114,8 +114,6 @@ should read
     df = pd.read_csv(root_dir+'/your_file.csv')
 ```
 
-This will contain how to format accession .csv files and where the place to change the defaults is found in the source code
-
 ### Output
 
 After running the software, a .csv file called output.csv will be in the base git repository. It contains the columns 'helix', 'beta', 'c', and 'unknown' which track the number of each secondary structure identified in the final .pdb model.
@@ -142,9 +140,6 @@ Dictionary of protein secondary structure: pattern recognition of hydrogen-bonde
 Kabsch W, Sander C,
 Biopolymers. 1983 22 2577-2637.
 PMID: 6667333; UI: 84128824.
-
-
-This will be the places my software is from, such as HHBLITS, ProMod3, etc.
 
 ### Special Thanks
 
