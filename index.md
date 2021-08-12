@@ -53,7 +53,6 @@ You may also run the software from the base directory like so:
 
 ```markdown
 singularity run --app PM promod.sif model_pipeline.py
-
 ```
 
 
