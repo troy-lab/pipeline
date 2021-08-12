@@ -37,8 +37,6 @@ singularity exec --app PM promod.sif ~/pipeline/model
 ```
 Note that if you did not place your repository in "$HOME/pipeline", you will need to adjust the path "~/pipeline/model" accordingly.
 
-If your .csv file is not named "input.csv", you will need to edit line 371 of model_pipeline.py accordingly.
-
 If you wish to change the name of the output.csv file, edit the last line of model_pipeline.py
 
 ```markdown
@@ -92,13 +90,53 @@ exit 0
 
 #### Input Formatting Requirements
 
+In the base folder of the git repository, include a .csv file with the UniProtKB accession codes for the proteins you wish to model. They should be under a column with the header "Accession." (N.b. this is case sensitive).
+
+If you include a column "Checked", it should contain boolean values which are False for unchecked proteins.
+
+The following columns are optional, but if included must be of the proper type:
+
+'helix' -- float
+'beta' -- float
+'c' -- float
+'unknown' -- float
+'error' -- float
+
+If your .csv file is not named "input.csv", you will need to edit line 371 of model_pipeline.py accordingly.
+
+I.e.
+```markdown
+    df = pd.read_csv(root_dir+'/input.csv')
+```
+
+should read
+```markdown
+    df = pd.read_csv(root_dir+'/your_file.csv')
+```
+
 This will contain how to format accession .csv files and where the place to change the defaults is found in the source code
+
+### Output
+
+After running the software, a .csv file called output.csv will be in the base git repository. It contains the columns 'helix', 'beta', 'c', and 'unknown' which track the number of each secondary structure identified in the final .pdb model.
+The 'Checked' column for each protein will be True. In addition, if the error column holds a value, this indicates an error in the modeling process for that protein.
+
+In addition to output from the .csv file, there is a directory called 'data' which contains directories for each protein which was modeled. These directories contin the final model ('model.pdb') and the amino acid sequence for the target protein in a .fasta file. In the subdirectory .var, there are two alignment files with the extension '.aln', which contain the original and formatted alignments. A .hhr file shows the results of the hhblits query, and the template.pdb file has the coordinates for the 3D template used to build the final model. Lastly, a .json file contains information used in the build as well as the calculated DSSP values. If there was an error in modeling, the details can be found in the .json file as well. (n.b. if there was no error modeling a protein, no error information will be present).
 
 ### References
 
 Steinegger M, Meier M, Mirdita M, Vöhringer H, Haunsberger S J, and Söding J (2019) HH-suite3 for fast remote homology detection and deep protein annotation, BMC Bioinformatics, 473. doi: 10.1186/s12859-019-3019-7
 
 Studer G, Tauriello G, Bienert S, Biasini M, Johner N, Schwede T (2021) ProMod3—A versatile homology modelling toolbox. PLoS Comput Biol 17(1): e1008667. https://doi.org/10.1371/journal.pcbi.1008667
+
+A series of PDB related databases for everyday needs.
+Wouter G Touw, Coos Baakman, Jon Black, Tim AH te Beek, E Krieger, Robbie P Joosten, Gert Vriend.
+Nucleic Acids Research 2015 January; 43(Database issue): D364-D368.
+
+Dictionary of protein secondary structure: pattern recognition of hydrogen-bonded and geometrical features.
+Kabsch W, Sander C,
+Biopolymers. 1983 22 2577-2637.
+PMID: 6667333; UI: 84128824.
 
 
 This will be the places my software is from, such as HHBLITS, ProMod3, etc.
@@ -119,39 +157,3 @@ https://www.ndsu.edu/cpm/
 
 Any more information?
 Include Grant information, thank you's, etc. here.
-
-
-### Github stuff
-
-You can use the [editor on GitHub](https://github.com/troy-lab/pipeline/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/troy-lab/pipeline/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
