@@ -149,11 +149,10 @@ Thank you also to Dr. Dali Sun for your support of this project.
 
 Thank you to the Electrical & Computer Engineering department and the Coatings and Polymeric Materials department at NDSU for supporting this project.
 
+Research reported in this work was supported by National Cancer Institute of the National Institutes of Health under award number #1R03CA252783-01
+
 For more information, please visit the following:
 
 https://rasulev.org/
 
 https://www.ndsu.edu/cpm/
-
-Any more information?
-Include Grant information, thank you's, etc. here.
