@@ -147,7 +147,7 @@ Thank you to Dr. Bakhtiyor Rasulev for supporting and guiding this project.
 
 Thank you also to Dr. Dali Sun for your support of this project.
 
-Thank you to NDSU's Coatings and Polymeric Materials department.
+Thank you to the Electrical & Computer Engineering department and the Coatings and Polymeric Materials department at NDSU for supporting this project.
 
 For more information, please visit the following:
 
