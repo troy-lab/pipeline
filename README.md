@@ -8,4 +8,5 @@ Finally, a model is generated using the ProMod3 modelling engine.
 Using DSSP, the secondary structure for this model can be calculated.
 This then can be added to a .csv file containing the accession codes.
 
-To initialize the program, first use the setup.sh bash script to get the database and container necessary for running the modeling script.
+For help running this software, please see the documentation:
+https://troy-lab.github.io/pipeline/
